@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-center">
+    <h1 class="display-4">EnglishTools</h1>
+    <p>EnglishTools es un sitio que agrupa un conjunto de herramientas útiles para mejorar tus habilidades en el idioma Inglés.</p>
+</div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="text-center">
+
+        <h3><b>@User.Identity.Name</b>, que bueno tenerte aquí de nuevo.</h3>
+    </div> 
+}
+

@@ -1,0 +1,15 @@
+﻿@model DataCollection<LevelDto>
+
+@{
+    ViewData["Title"] = "Effortless English";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model != null && Model.Items != null)
+{
+    @foreach (var item in Model.Items)
+    {
+        <p>@item.Name</p>
+    }
+}
