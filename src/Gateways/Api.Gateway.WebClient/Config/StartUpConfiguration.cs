@@ -16,7 +16,7 @@ namespace Api.Gateway.WebClient.Config
         public static IServiceCollection AddProxiesRegistration(this IServiceCollection service, IConfiguration configuration)
         {
             service.AddHttpContextAccessor();
-            service.AddHttpClient<IEffortlessEnglishProxy, EffortlessEnglishProxy>();
+            service.AddHttpClient<ICatalogProxy, CatalogProxy>();
             return service;
         }
     }

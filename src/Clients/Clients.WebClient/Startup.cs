@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Clients.WebClient.Proxies.Common;
-using Clients.WebClient.Proxies.EffortlessEnglish;
+using Clients.WebClient.Proxies.Catalog;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,7 +29,7 @@ namespace Clients.WebClient
             // Proxies
             services.AddSingleton(new ApiGatewayUrl(Configuration.GetValue<string>("ApiGatewayUrl")));
             services.AddHttpContextAccessor();
-            services.AddHttpClient<IEffortlessEnglishProxy, EffortlessEnglishProxy>();
+            services.AddHttpClient<ICatalogProxy, CatalogProxy>();
 
             // Add cookie authentication
             services.Configure<CookiePolicyOptions>(options =>
