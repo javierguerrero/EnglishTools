@@ -10,8 +10,8 @@ namespace Catalog.Domain
         public string Text { get; set; }
         public int Order { get; set; }
 
-        public int ConversationId { get; set; }
-        public Conversation Conversation { get; set; }
+        public int LessonId { get; set; }
+        public Lesson Lesson { get; set; }
 
         public int CharacterId { get; set; }
         public Character Character { get; set; }

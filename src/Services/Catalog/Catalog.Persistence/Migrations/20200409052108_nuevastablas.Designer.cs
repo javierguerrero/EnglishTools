@@ -4,14 +4,16 @@ using Catalog.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Catalog.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200409052108_nuevastablas")]
+    partial class nuevastablas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +39,24 @@ namespace Catalog.Persistence.Migrations
 
                     b.HasKey("CharacterId");
 
-                    b.ToTable("Characters");
+                    b.ToTable("Character");
+                });
+
+            modelBuilder.Entity("Catalog.Domain.Conversation", b =>
+                {
+                    b.Property<int>("ConversationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("VideoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("ConversationId");
+
+                    b.ToTable("Conversation");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Dialogue", b =>
@@ -50,7 +69,7 @@ namespace Catalog.Persistence.Migrations
                     b.Property<int>("CharacterId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LessonId")
+                    b.Property<int>("ConversationId")
                         .HasColumnType("int");
 
                     b.Property<int>("Order")
@@ -65,9 +84,9 @@ namespace Catalog.Persistence.Migrations
 
                     b.HasIndex("CharacterId");
 
-                    b.HasIndex("LessonId");
+                    b.HasIndex("ConversationId");
 
-                    b.ToTable("Dialogues");
+                    b.ToTable("Dialogue");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Lesson", b =>
@@ -76,6 +95,9 @@ namespace Catalog.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ConversationId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -90,10 +112,9 @@ namespace Catalog.Persistence.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<string>("VideoUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("LessonId");
+
+                    b.HasIndex("ConversationId");
 
                     b.HasIndex("LevelId");
 
@@ -155,15 +176,19 @@ namespace Catalog.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Catalog.Domain.Lesson", "Lesson")
+                    b.HasOne("Catalog.Domain.Conversation", "Conversation")
                         .WithMany("Dialogues")
-                        .HasForeignKey("LessonId")
+                        .HasForeignKey("ConversationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Catalog.Domain.Lesson", b =>
                 {
+                    b.HasOne("Catalog.Domain.Conversation", "Conversation")
+                        .WithMany()
+                        .HasForeignKey("ConversationId");
+
                     b.HasOne("Catalog.Domain.Level", null)
                         .WithMany("Lessons")
                         .HasForeignKey("LevelId");

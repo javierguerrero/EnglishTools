@@ -46,7 +46,16 @@ namespace Clients.WebClient.Proxies.Catalog
 
         public async Task<LessonDto> GetLessonAsync(int id)
         {
-            throw new NotImplementedException();
+            var request = await _httpClient.GetAsync($"{_apiGatewayUrl}lessons/{id}");
+            request.EnsureSuccessStatusCode();
+
+            return JsonSerializer.Deserialize<LessonDto>(
+                await request.Content.ReadAsStringAsync(),
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }
+            );
         }
     }
 }

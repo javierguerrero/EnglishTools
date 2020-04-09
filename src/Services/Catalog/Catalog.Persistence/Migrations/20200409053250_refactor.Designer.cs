@@ -4,14 +4,16 @@ using Catalog.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Catalog.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200409053250_refactor")]
+    partial class refactor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +39,7 @@ namespace Catalog.Persistence.Migrations
 
                     b.HasKey("CharacterId");
 
-                    b.ToTable("Characters");
+                    b.ToTable("Character");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Dialogue", b =>
@@ -67,7 +69,7 @@ namespace Catalog.Persistence.Migrations
 
                     b.HasIndex("LessonId");
 
-                    b.ToTable("Dialogues");
+                    b.ToTable("Dialogue");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Lesson", b =>

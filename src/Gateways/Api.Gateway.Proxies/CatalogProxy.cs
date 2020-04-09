@@ -12,9 +12,8 @@ namespace Api.Gateway.Proxies
 {
     public interface ICatalogProxy
     {
-        Task<DataCollection<LevelDto>> GetLevelsAsync(int page, int take);
-
         Task<DataCollection<LessonDto>> GetLessonsAsync(int page, int take);
+        Task<LessonDto> GetLessonAsync(int id);
     }
 
     public class CatalogProxy : ICatalogProxy
@@ -46,12 +45,12 @@ namespace Api.Gateway.Proxies
             );
         }
 
-        public async Task<DataCollection<LevelDto>> GetLevelsAsync(int page, int take)
+        public async Task<LessonDto> GetLessonAsync(int id)
         {
-            var request = await _httpClient.GetAsync($"{_apiUrls.CatalogUrl}levels?page={page}&take={take}");
+            var request = await _httpClient.GetAsync($"{_apiUrls.CatalogUrl}lessons/{id}");
             request.EnsureSuccessStatusCode();
 
-            return JsonSerializer.Deserialize<DataCollection<LevelDto>>(
+            return JsonSerializer.Deserialize<LessonDto>(
                 await request.Content.ReadAsStringAsync(),
                 new JsonSerializerOptions
                 {

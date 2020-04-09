@@ -25,5 +25,11 @@ namespace Api.Gateway.WebClient.Controllers
         {
             return await _catalogProxy.GetLessonsAsync(page, take);
         }
+
+        [HttpGet("{id}")]
+        public async Task<LessonDto> GetLesson(int id)
+        {
+            return await _catalogProxy.GetLessonAsync(id);
+        }
     }
 }

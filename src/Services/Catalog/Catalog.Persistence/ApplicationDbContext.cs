@@ -2,6 +2,9 @@
 using Catalog.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
 
+
+// https://code-maze.com/migrations-and-seed-data-efcore/
+
 namespace Catalog.Persistence
 {
     public class ApplicationDbContext : DbContext
@@ -12,6 +15,8 @@ namespace Catalog.Persistence
 
         public DbSet<Level> Levels { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Dialogue> Dialogues { get; set; }
+        public DbSet<Character> Characters { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +30,8 @@ namespace Catalog.Persistence
         {
             new LevelConfiguration(modelBuilder.Entity<Level>());
             new LessonConfiguration(modelBuilder.Entity<Lesson>());
+            new DialogueConfiguration(modelBuilder.Entity<Dialogue>());
+            new CharacterConfiguration(modelBuilder.Entity<Character>());
         }
     }
 }

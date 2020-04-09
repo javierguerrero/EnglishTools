@@ -1,4 +1,5 @@
-﻿using Catalog.Persistence;
+﻿using AutoMapper;
+using Catalog.Persistence;
 using Catalog.Service.Queries.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Service.Common.Collection;
@@ -36,7 +37,12 @@ namespace Catalog.Service.Queries
 
         public async Task<LessonDto> GetAsync(int id)
         {
-            return (await _context.Lessons.SingleAsync(x => x.LessonId == id)).MapTo<LessonDto>();
+            var data = await _context.Lessons
+                                       .Include(x => x.Dialogues)
+                                        .ThenInclude(x => x.Character)
+                                       .SingleAsync(x => x.LessonId == id);
+
+            return Mapper.Map<LessonDto>(data);
         }
     }
 }
