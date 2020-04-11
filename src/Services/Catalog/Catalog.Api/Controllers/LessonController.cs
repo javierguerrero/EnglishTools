@@ -1,6 +1,8 @@
 ﻿
+using Catalog.Service.EventHandlers.Commands;
 using Catalog.Service.Queries;
 using Catalog.Service.Queries.DTOs;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +18,13 @@ namespace Catalog.Api.Controllers
     public class LessonController : Controller
     {
         private readonly ILessonQueryService _lessonQueryService;
+        private readonly IMediator _mediator;
 
-        public LessonController(ILessonQueryService lessonQueryService)
+        public LessonController(
+            ILessonQueryService lessonQueryService,
+            IMediator mediator)
         {
+            _mediator = mediator;
             _lessonQueryService = lessonQueryService;
         }
 
@@ -32,6 +38,13 @@ namespace Catalog.Api.Controllers
         public async Task<LessonDto> Get(int id)
         {
             return await _lessonQueryService.GetAsync(id);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(LessonCreateCommand notification)
+        {
+            await _mediator.Publish(notification);
+            return Ok();
         }
     }
 }

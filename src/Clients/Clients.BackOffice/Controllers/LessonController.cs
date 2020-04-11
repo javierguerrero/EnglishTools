@@ -1,10 +1,15 @@
 ﻿using Clients.BackOffice.Proxies.Catalog;
+using Clients.BackOffice.Proxies.Catalog.Commands;
+using Clients.BackOffice.ViewModels;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Clients.BackOffice.Controllers
 {
-    //[Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class LessonController : Controller
     {
         private readonly ICatalogProxy _catalogProxy;
@@ -20,8 +25,38 @@ namespace Clients.BackOffice.Controllers
             return View(result);
         }
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create(string returnUrl)
         {
+            var vm = new LessonViewModel
+            {
+                ReturnUrl = returnUrl,
+                Name = string.Empty,
+                Description = string.Empty
+            };
+            return View("Create", vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(LessonViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var command = new LessonCreateCommand { 
+                    Name = vm.Name, 
+                    Description = vm.Description,
+                    VideoUrl = vm.VideoUrl
+                };
+                try
+                {
+                    await _catalogProxy.CrateLessonAsync(command);
+                    return LocalRedirect(vm.ReturnUrl);
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+
+            }
             return View();
         }
 

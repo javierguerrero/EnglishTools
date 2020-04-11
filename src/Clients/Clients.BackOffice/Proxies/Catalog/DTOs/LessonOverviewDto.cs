@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Clients.BackOffice.Proxies.Catalog
+namespace Clients.BackOffice.Proxies.Catalog.DTOs
 {
-    public class LevelDto
+    public class LessonOverviewDto
     {
-        public int LevelId { get; set; }
+        public int LessonId { get; set; }
         public string Name { get; set; }
     }
 }

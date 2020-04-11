@@ -1,4 +1,5 @@
 ﻿using Api.Gateway.Models;
+using Api.Gateway.Models.Catalog.Commands;
 using Api.Gateway.Models.Catalog.DTOs;
 using Api.Gateway.Proxies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,6 +31,13 @@ namespace Api.Gateway.BackOffice.Controllers
         public async Task<LessonDto> GetLesson(int id)
         {
             return await _catalogProxy.GetLessonAsync(id);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(LessonCreateCommand command)
+        {
+            await _catalogProxy.CreateLessonAsync(command);
+            return Ok();
         }
     }
 }

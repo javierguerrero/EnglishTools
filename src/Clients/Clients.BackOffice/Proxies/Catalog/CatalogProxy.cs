@@ -1,11 +1,9 @@
-﻿
-
+﻿using Clients.BackOffice.Proxies.Catalog.Commands;
+using Clients.BackOffice.Proxies.Catalog.DTOs;
 using Clients.BackOffice.Proxies.Common;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -14,7 +12,10 @@ namespace Clients.BackOffice.Proxies.Catalog
     public interface ICatalogProxy
     {
         Task<DataCollection<LessonOverviewDto>> GetLessonOverviewsAsync(int page, int take);
+
         Task<LessonDto> GetLessonAsync(int id);
+
+        Task CrateLessonAsync(LessonCreateCommand lesson);
     }
 
     public class CatalogProxy : ICatalogProxy
@@ -58,6 +59,18 @@ namespace Clients.BackOffice.Proxies.Catalog
                     PropertyNameCaseInsensitive = true
                 }
             );
+        }
+
+        public async Task CrateLessonAsync(LessonCreateCommand command)
+        {
+            var content = new StringContent(
+                JsonSerializer.Serialize(command),
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            var request = await _httpClient.PostAsync($"{_apiGatewayUrl}lessons", content);
+            request.EnsureSuccessStatusCode();
         }
     }
 }
