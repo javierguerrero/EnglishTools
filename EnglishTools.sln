@@ -81,6 +81,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Common.Paging", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Common.Mapping", "src\Services\Common\Service.Common.Mapping\Service.Common.Mapping.csproj", "{17516924-BD96-420C-8AF5-DD0DFBA2213B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clients.BackOffice", "src\Clients\Clients.BackOffice\Clients.BackOffice.csproj", "{48533D9B-72A9-4BC8-9A81-88DC33A4FEB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +169,10 @@ Global
 		{17516924-BD96-420C-8AF5-DD0DFBA2213B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17516924-BD96-420C-8AF5-DD0DFBA2213B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17516924-BD96-420C-8AF5-DD0DFBA2213B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48533D9B-72A9-4BC8-9A81-88DC33A4FEB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48533D9B-72A9-4BC8-9A81-88DC33A4FEB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48533D9B-72A9-4BC8-9A81-88DC33A4FEB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48533D9B-72A9-4BC8-9A81-88DC33A4FEB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -207,6 +213,7 @@ Global
 		{604191E8-8C91-4F54-92B4-6E73A7F2EA5A} = {3DB7C964-ED6B-494F-89A4-2A25EBA9A8EB}
 		{29264B9D-493D-408A-814D-FB94997C9D8B} = {3DB7C964-ED6B-494F-89A4-2A25EBA9A8EB}
 		{17516924-BD96-420C-8AF5-DD0DFBA2213B} = {3DB7C964-ED6B-494F-89A4-2A25EBA9A8EB}
+		{48533D9B-72A9-4BC8-9A81-88DC33A4FEB8} = {99235D0A-7356-479B-AB69-231B9F7DC71E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ADAF4F8E-9400-4750-B67B-EFE9CE43F30E}
