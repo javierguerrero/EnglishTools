@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Clients.BackOffice.Controllers
@@ -25,13 +26,14 @@ namespace Clients.BackOffice.Controllers
             return View(result);
         }
 
-        public IActionResult Create(string returnUrl)
+        public async Task<IActionResult> Create(string returnUrl)
         {
             var vm = new LessonViewModel
             {
                 ReturnUrl = returnUrl,
                 Name = string.Empty,
-                Description = string.Empty
+                Description = string.Empty,
+                Characters = await GetCharacters()
             };
             return View("Create", vm);
         }
@@ -41,21 +43,22 @@ namespace Clients.BackOffice.Controllers
         {
             if (ModelState.IsValid)
             {
-                var command = new LessonCreateCommand { 
-                    Name = vm.Name, 
+                var command = new LessonCreateCommand
+                {
+                    Name = vm.Name,
                     Description = vm.Description,
-                    VideoUrl = vm.VideoUrl
+                    VideoUrl = vm.VideoUrl,
+                    Dialogues = GetDialogues(vm.Dialogues)
                 };
                 try
                 {
-                    await _catalogProxy.CrateLessonAsync(command);
+                    await _catalogProxy.CreateLessonAsync(command);
                     return LocalRedirect(vm.ReturnUrl);
                 }
                 catch (Exception ex)
                 {
                     ModelState.AddModelError("", ex.Message);
                 }
-
             }
             return View();
         }
@@ -63,6 +66,37 @@ namespace Clients.BackOffice.Controllers
         public async Task<IActionResult> Delete()
         {
             return View();
+        }
+
+
+        private async Task<IEnumerable<CharacterViewModel>> GetCharacters()
+        {
+            var result = new List<CharacterViewModel>();
+            var characters = await _catalogProxy.GetCharactersAsync();
+            foreach (var character in characters)
+            {
+                result.Add(new CharacterViewModel
+                {
+                    CharacterId = character.CharacterId,
+                    CharacterName = character.Name
+                });
+            }
+            return result;
+        }
+
+        private IEnumerable<DialogueCreate> GetDialogues(IEnumerable<DialogueViewModel> dialogues)
+        {
+            var result = new List<DialogueCreate>();
+            foreach (var dialogue in dialogues)
+            {
+                result.Add(new DialogueCreate
+                {
+                    CharacterId = dialogue.CharacterId,
+                    Text = dialogue.Text
+                });
+            }
+
+            return result;
         }
     }
 }

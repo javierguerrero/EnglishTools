@@ -31,6 +31,7 @@ namespace Catalog.Api
             // Register services
             services.AddTransient<ILevelQueryService, LevelQueryService>();
             services.AddTransient<ILessonQueryService, LessonQueryService>();
+            services.AddTransient<ICharacterQueryService, CharacterQueryService>();
 
             // DbContext
             services.AddDbContext<ApplicationDbContext>(

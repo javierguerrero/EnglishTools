@@ -34,14 +34,33 @@
         <input asp-for="VideoUrl" class="form-control" />
     </div>
 
-    <h4>Dialogs</h4>
+
+    <h4>Dialogues</h4>
+    <p>Elige los personajes:</p>
+    <div class="row">
+        <div class="col-xs-5">
+            @Html.DropDownList("CharacterId", 
+                                new SelectList(Model.Characters, "CharacterId", "CharacterName"), 
+                                new { @class = "form-control", id = "multiselect", size = "5", multiple="multiple" })
+        </div>
+
+        <div class="col-xs-2">
+            <button type="button" id="multiselect_rightAll" class="btn btn-block"> >> </button>
+            <button type="button" id="multiselect_rightSelected" class="btn btn-block"> > </button>
+            <button type="button" id="multiselect_leftSelected" class="btn btn-block"> < </button>
+            <button type="button" id="multiselect_leftAll" class="btn btn-block"> << </button>
+        </div>
+
+        <div class="col-xs-5">
+            <select name="to" id="multiselect_to" class="form-control" size="5" multiple="multiple"></select>
+        </div>
+    </div>
+
     <div class="form-group">
         <input id="AddDialogue" class="btn btn-light" type="button" value="Add" />
     </div>
 
-    <div class="form-group dialogues">
-
-    </div>
+    <div class="form-group dialogues"></div>
 
     <div class="form-group">
         <input type="submit" class="btn btn-primary" value="Create" />
@@ -49,18 +68,27 @@
 </form>
 
 @section scripts {
+
+    <script src="~/js/multiselect.min.js"></script>
     <script>
         $(document).ready(function () {
+            $('#multiselect').multiselect();
+
+
             var i = 0;
 
             $('#AddDialogue').click(function () {
                 var div = $('<div />');
-                var characterId = 0;
-                var text = "";
-                var order = 0;
+
+                var characterSelect = $('#multiselect_to').clone()
+                    .attr('name', 'Dialogues[' + i + '].CharacterId')
+                    .removeAttr('multiple')
+                    .removeAttr('size')
+                    .removeClass();
+                div.append(characterSelect);
 
                 var textBox = $('<input />').attr('type', 'text').attr('name', 'Dialogues[' + i + '].Text');
-                textBox.val(text);
+                textBox.val("");
                 div.append(textBox);
 
                 var removeButton = $('<input />').attr('type', 'button').attr('value', 'Remove');

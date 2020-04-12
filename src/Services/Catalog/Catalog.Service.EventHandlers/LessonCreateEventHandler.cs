@@ -3,9 +3,7 @@ using Catalog.Persistence;
 using Catalog.Service.EventHandlers.Commands;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,13 +25,30 @@ namespace Catalog.Service.EventHandlers
         {
             using (var trx = await _context.Database.BeginTransactionAsync())
             {
-                var entry = new Lesson();
-                entry.Name = notification.Name;
-                entry.Description = notification.Description;
+                var lesson = new Lesson();
+                lesson.Name = notification.Name;
+                lesson.Description = notification.Description;
 
-                await _context.Lessons.AddAsync(entry);
+                // save lesson
+                await _context.Lessons.AddAsync(lesson);
                 await _context.SaveChangesAsync();
 
+                // save dialogues
+                List<Dialogue> dialogues = new List<Dialogue>();
+                foreach (var item in notification.Dialogues)
+                {
+                    var dialog = new Dialogue();
+                    dialog.LessonId = lesson.LessonId;
+                    dialog.CharacterId = item.CharacterId;
+                    dialog.Text = item.Text;
+                    dialog.Order = 1;
+
+                    dialogues.Add(dialog);
+                }
+                await _context.Dialogues.AddRangeAsync(dialogues);
+                await _context.SaveChangesAsync();
+
+                //
                 await trx.CommitAsync();
             }
         }

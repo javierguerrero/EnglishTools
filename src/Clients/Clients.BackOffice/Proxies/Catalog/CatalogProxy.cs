@@ -2,6 +2,7 @@
 using Clients.BackOffice.Proxies.Catalog.DTOs;
 using Clients.BackOffice.Proxies.Common;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -15,7 +16,9 @@ namespace Clients.BackOffice.Proxies.Catalog
 
         Task<LessonDto> GetLessonAsync(int id);
 
-        Task CrateLessonAsync(LessonCreateCommand lesson);
+        Task CreateLessonAsync(LessonCreateCommand lesson);
+
+        Task<List<CharacterDto>> GetCharactersAsync();
     }
 
     public class CatalogProxy : ICatalogProxy
@@ -23,10 +26,7 @@ namespace Clients.BackOffice.Proxies.Catalog
         private readonly string _apiGatewayUrl;
         private readonly HttpClient _httpClient;
 
-        public CatalogProxy(
-            HttpClient httpClient,
-            ApiGatewayUrl apiGatewayUrl,
-            IHttpContextAccessor httpContextAccessor)
+        public CatalogProxy(HttpClient httpClient, ApiGatewayUrl apiGatewayUrl, IHttpContextAccessor httpContextAccessor)
         {
             httpClient.AddBearerToken(httpContextAccessor);
             _httpClient = httpClient;
@@ -61,7 +61,7 @@ namespace Clients.BackOffice.Proxies.Catalog
             );
         }
 
-        public async Task CrateLessonAsync(LessonCreateCommand command)
+        public async Task CreateLessonAsync(LessonCreateCommand command)
         {
             var content = new StringContent(
                 JsonSerializer.Serialize(command),
@@ -71,6 +71,20 @@ namespace Clients.BackOffice.Proxies.Catalog
 
             var request = await _httpClient.PostAsync($"{_apiGatewayUrl}lessons", content);
             request.EnsureSuccessStatusCode();
+        }
+
+        public async Task<List<CharacterDto>> GetCharactersAsync()
+        {
+            var request = await _httpClient.GetAsync($"{_apiGatewayUrl}characters");
+            request.EnsureSuccessStatusCode();
+
+            return JsonSerializer.Deserialize<List<CharacterDto>>(
+                await request.Content.ReadAsStringAsync(),
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }
+            );
         }
     }
 }

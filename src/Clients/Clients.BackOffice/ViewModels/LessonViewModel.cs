@@ -19,8 +19,16 @@ namespace Clients.BackOffice.ViewModels
         [Required]
         public string VideoUrl { get; set; }
 
+        public IEnumerable<CharacterViewModel> Characters { get; set; } = new List<CharacterViewModel>();
+
         public IEnumerable<DialogueViewModel> Dialogues { get; set; } = new List<DialogueViewModel>();
 
+    }
+
+    public class CharacterViewModel
+    {
+        public int CharacterId { get; set; }
+        public string CharacterName { get; set; }
     }
 
     public class DialogueViewModel

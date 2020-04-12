@@ -5,6 +5,7 @@ using Api.Gateway.Proxy;
 using Api.Gateway.WebClient.Proxy.Config;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -17,7 +18,10 @@ namespace Api.Gateway.Proxies
         Task<DataCollection<LessonDto>> GetLessonsAsync(int page, int take);
 
         Task<LessonDto> GetLessonAsync(int id);
+
         Task CreateLessonAsync(LessonCreateCommand command);
+
+        Task<IEnumerable<CharacterDto>> GetCharactersAsync();
     }
 
     public class CatalogProxy : ICatalogProxy
@@ -25,15 +29,32 @@ namespace Api.Gateway.Proxies
         private readonly ApiUrls _apiUrls;
         private readonly HttpClient _httpClient;
 
-        public CatalogProxy(
-            HttpClient httpClient,
-            IOptions<ApiUrls> apiUrls,
-            IHttpContextAccessor httpContextAccessor)
+        public CatalogProxy(HttpClient httpClient, IOptions<ApiUrls> apiUrls, IHttpContextAccessor httpContextAccessor)
         {
             httpClient.AddBearerToken(httpContextAccessor);
             _httpClient = httpClient;
             _apiUrls = apiUrls.Value;
         }
+
+        #region Character
+
+        public async Task<IEnumerable<CharacterDto>> GetCharactersAsync()
+        {
+            var request = await _httpClient.GetAsync($"{_apiUrls.CatalogUrl}characters");
+            request.EnsureSuccessStatusCode();
+
+            return JsonSerializer.Deserialize<IEnumerable<CharacterDto>>(
+                await request.Content.ReadAsStringAsync(),
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }
+            );
+        }
+
+        #endregion
+
+        #region Lesson
 
         public async Task<DataCollection<LessonDto>> GetLessonsAsync(int page, int take)
         {
@@ -74,5 +95,7 @@ namespace Api.Gateway.Proxies
             var request = await _httpClient.PostAsync($"{_apiUrls.CatalogUrl}lessons", content);
             request.EnsureSuccessStatusCode();
         }
+
+        #endregion Lesson
     }
 }
