@@ -46,5 +46,12 @@ namespace Catalog.Api.Controllers
             await _mediator.Publish(notification);
             return Ok();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            await _lessonQueryService.Remove(id);
+            return Ok();
+        }
     }
 }
